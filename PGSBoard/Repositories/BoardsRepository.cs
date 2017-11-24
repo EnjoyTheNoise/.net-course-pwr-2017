@@ -16,7 +16,7 @@ namespace PGSBoard.Repositories
                     .Include("Lists.Cards")
                     .ToList();
 
-                // deleteCardDto mapping
+                // dto mapping
                 var boardsDto = boards.Select(b => new BoardDto
                 {
                     Id = b.Id,
@@ -61,7 +61,7 @@ namespace PGSBoard.Repositories
                     .Include("Lists.Cards")
                     .Single(b => b.Id == boardId);
 
-                // deleteCardDto mapping
+                // dto mapping
                 var boardDto = new BoardDto
                 {
                     Id = board.Id,
