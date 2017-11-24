@@ -12,6 +12,7 @@ namespace PGSBoard.Dtos
 
     public class CreateBoardFormDto
     {
+        public int BoardId { get; set; }
         [Required(ErrorMessage = "This field is very important so it's required")] //This attribute tells that this field is required and has custom validation message
         public string Name { get; set; }
         [Required]  //This attribute tells that this field is required too so it can't be empty

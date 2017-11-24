@@ -136,6 +136,7 @@
     <Compile Include="Dtos\CreateBoardFormDto.cs" />
     <Compile Include="Dtos\CreateCardDto.cs" />
     <Compile Include="Dtos\CreateListDto.cs" />
+    <Compile Include="Dtos\DeleteBoardDto.cs" />
     <Compile Include="Dtos\DeleteCardDto.cs" />
     <Compile Include="Dtos\DeleteListDto.cs" />
     <Compile Include="Dtos\ListDto.cs" />
@@ -145,6 +146,10 @@
     <Compile Include="Migrations\201703271951217_InitialCreate.cs" />
     <Compile Include="Migrations\201703271951217_InitialCreate.Designer.cs">
       <DependentUpon>201703271951217_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201711232149341_DbUpdate.cs" />
+    <Compile Include="Migrations\201711232149341_DbUpdate.Designer.cs">
+      <DependentUpon>201711232149341_DbUpdate.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Board.cs" />
@@ -217,6 +222,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201703271951217_InitialCreate.resx">
       <DependentUpon>201703271951217_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201711232149341_DbUpdate.resx">
+      <DependentUpon>201711232149341_DbUpdate.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

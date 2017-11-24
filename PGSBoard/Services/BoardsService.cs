@@ -45,7 +45,7 @@
         {
             var board = this.boardsRepository.GetBoard(boardId);
 
-            var viewModel = new ShowBoardViewModel(board.Name,      //Create viewmodel for Board
+            var viewModel = new ShowBoardViewModel(boardId, board.Name,      //Create viewmodel for Board
                 MapListsToListViewModels(board.Lists.ToList()),      //Map all lists which board contains into ListViewModel
                 new CreateListDto(boardId));    //Create dto for creating new list and assign to it this board id
             return viewModel;
@@ -79,7 +79,7 @@
         }
 
         //Method for creatin new list
-        public int CreateCart(CreateCardDto dto)
+        public int CreateCard(CreateCardDto dto)
         {
             this.boardsRepository.AddCard(dto);
 
@@ -96,6 +96,11 @@
         public int DeleteList(DeleteListDto deleteListDto)
         {
             return this.boardsRepository.DeleteList(deleteListDto);
+        }
+
+        public int DeleteBoard(DeleteBoardDto deleteBoardDto)
+        {
+            return this.boardsRepository.DeleteBoard(deleteBoardDto);
         }
     }
 }

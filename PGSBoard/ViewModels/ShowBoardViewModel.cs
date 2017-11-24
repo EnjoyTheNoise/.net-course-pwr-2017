@@ -9,12 +9,14 @@ namespace PGSBoard.ViewModels
 
     public class ShowBoardViewModel
     {
+        public int Id { get; set; }
         public string Name { get; set; }
         public List<ListViewModel> Lists { get; set; }
         public CreateListDto CreateListDto { get; set; }
 
-        public ShowBoardViewModel(string name, List<ListViewModel> lists, CreateListDto createListDto)
+        public ShowBoardViewModel(int id, string name, List<ListViewModel> lists, CreateListDto createListDto)
         {
+            Id = id;
             Name = name;
             Lists = lists;
             CreateListDto = createListDto;

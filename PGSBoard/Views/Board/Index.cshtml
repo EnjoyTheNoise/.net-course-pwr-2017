@@ -11,34 +11,38 @@
 
 <body>
     <div class="container">
-        <header class="row">
-            <h2 class="col-md-6">Twoje Tablice</h2>
-        </header>
-        <main class="row">
-            <section class="col-md-6">
-                <div class="row">
-                    <h3 class="col-md-12">Wybierz tablice:</h3>
+        <div class="row page-header">
+            <h1 class="col-md-6">Definitely not Trello</h1>
+        </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    @Html.ActionLink("Stwórz nową",
+                        "CreateBoard", "Board", null,
+                        new { @class = "btn btn-success" })
                 </div>
-                @using (Html.BeginForm("Show", "Board", FormMethod.Get))// For possiblity tp redirect user to board he chosen 
-                                                                         // I've created form,which on submit sends GET request with id of chosen board
-                {
+            </div>
+            <div class="row">
+                <div class="col-md-6">
                     <div class="row">
-                        <div class="col-md-10">
-                            @Html.DropDownListFor(m => m.SelectedBoardId, Model.BoardsItems,
-                                new {@class = "form-control"})
-                        </div>
-                        <div class="col-md-2">
-                            <input type="submit" class="btn btn-primary" value="Przejdz"/>
-                        </div>
+                        <h3 class="col-md-12">Wybierz istniejącą  tablicę:</h3>
                     </div>
-                }
-            </section>
-            <section class="col-md-6">
-                @Html.ActionLink("Create Board", 
-               "CreateBoard", "Board", null,
-               new { @class = "btn btn-primary"})
-            </section>
-        </main>
+                    @using (Html.BeginForm("Show", "Board", FormMethod.Get)) // For possiblity tp redirect user to board he chosen
+                                                                            // I've created form,which on submit sends GET request with id of chosen board
+                    {
+                        <div class="row">
+                            <div class="col-md-7">
+                                @Html.DropDownListFor(m => m.SelectedBoardId, Model.BoardsItems,
+                                new { @class = "form-control" })
+                            </div>
+                            <div class="col-md-5">
+                                <input type="submit" class="btn btn-default" value="Przejdź" />
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="js/bootstrap.js"></script>

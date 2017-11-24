@@ -2,10 +2,39 @@
     $('.card').on('click', '.card__remove-card-btn', deleteCard);
     $('button').on('click', showForm);
     $('.list').on('click', '.list__remove-list-btn', deleteList);
+    $('.board__remove-board-btn').on('click', deleteBoard);
 
     function showForm(event) {
         event.stopPropagation();
         $(this).prev().removeClass("hidden-form");
+    }
+
+    function deleteBoard(event) {
+        event.stopPropagation();
+        var boardId = +$(this).data("board-id");
+
+        if (confirm("Usuwasz tablicę, jesteś pewien?")) {
+            $.ajax({
+                method: "DELETE",
+                url: "/Board/DeleteBoard",
+                data: { boardId: boardId },
+                success: onSuccess,
+                error: onError
+            });
+        } else {
+            return;
+        }
+
+        function onSuccess(data) {
+            if (isNaN(data) || data === 0) {
+                return;
+            }
+            alert("Usunięto");
+            window.location = "http://localhost:59848/";
+        }
+
+        function onError() {
+        }
     }
 
     function deleteList(event) {
@@ -19,7 +48,6 @@
             success: onSuccess,
             error: onError
         });
-
 
         function onSuccess(data) {
             if (isNaN(data) || data === 0) {

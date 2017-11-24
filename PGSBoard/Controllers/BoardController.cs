@@ -65,7 +65,7 @@
         [HttpPost]
         public ActionResult CreateCard(CreateCardDto dto)
         {
-            int boardId = _boardsService.CreateCart(dto);
+            int boardId = _boardsService.CreateCard(dto);
             return RedirectToAction("Show", new { SelectedBoardId = boardId });
         }
 
@@ -93,6 +93,20 @@
             };
 
             var result = _boardsService.DeleteList(deleteListDto);
+            return new JsonResult()
+            {
+                Data = result
+            };
+        }
+        [HttpDelete]
+        public JsonResult DeleteBoard(int boardId)
+        {
+            var deleteBoardDto = new DeleteBoardDto()
+            {
+                Id = boardId
+            };
+
+            var result = _boardsService.DeleteBoard(deleteBoardDto);
             return new JsonResult()
             {
                 Data = result

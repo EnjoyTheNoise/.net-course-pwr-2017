@@ -1,8 +1,7 @@
 ﻿@model PGSBoard.ViewModels.ShowBoardViewModel
 
 @{
-    ViewBag.Title = "title";
-
+    ViewBag.Title = Model.Name;
 }
 
 @*This is new view, this view is showing a board which user has chosen. This will be most important view in app.
@@ -10,7 +9,12 @@
 
 <div class="container-fluid">
     <header class="row">
-        <h1 class="col-md-3 col-md-offset-1">@Model.Name</h1> @*Show board name*@
+        <h1 class="col-md-3">@Model.Name</h1> @*Show board name*@
+        <h1 class="col-md-2 text-center">
+            <button data-board-id ="@Model.Id" type="button" class="btn btn-danger board__remove-board-btn">
+                <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Delete Board
+            </button>
+        </h1>
     </header>
     <main class="row">
         <div class="col-md-12">

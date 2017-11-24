@@ -16,7 +16,7 @@ namespace PGSBoard.Repositories
                     .Include("Lists.Cards")
                     .ToList();
 
-                // dto mapping
+                // deleteCardDto mapping
                 var boardsDto = boards.Select(b => new BoardDto
                 {
                     Id = b.Id,
@@ -61,7 +61,7 @@ namespace PGSBoard.Repositories
                     .Include("Lists.Cards")
                     .Single(b => b.Id == boardId);
 
-                // dto mapping
+                // deleteCardDto mapping
                 var boardDto = new BoardDto
                 {
                     Id = board.Id,
@@ -116,13 +116,13 @@ namespace PGSBoard.Repositories
         }
 
 
-        public int DeleteCard(DeleteCardDto dto)
+        public int DeleteCard(DeleteCardDto deleteCardDto)
         {
             using (var db = new PGSBoardContext())
             {
-                var cardToRemove = db.Cards.Single(card => card.Id == dto.CardId);
+                var cardToRemove = db.Cards.Single(card => card.Id == deleteCardDto.CardId);
                 db.Cards.Remove(cardToRemove);
-                return db.SaveChanges() == 1 ? dto.CardId : 0;
+                return db.SaveChanges() == 1 ? deleteCardDto.CardId : 0;
             }
         }
 
@@ -133,6 +133,16 @@ namespace PGSBoard.Repositories
                 var listToRemove = db.Lists.Single(list => list.Id == deleteListDto.ListId);
                 db.Lists.Remove((listToRemove));
                 return db.SaveChanges() == 1 ? deleteListDto.ListId : 0;
+            }
+        }
+
+        public int DeleteBoard(DeleteBoardDto deleteBoardDto)
+        {
+            using (var db = new PGSBoardContext())
+            {
+                var boardToRemove = db.Boards.Single(board => board.Id == deleteBoardDto.Id);
+                db.Boards.Remove(boardToRemove);
+                return db.SaveChanges() == 1 ? deleteBoardDto.Id : 0;
             }
         }
     }
