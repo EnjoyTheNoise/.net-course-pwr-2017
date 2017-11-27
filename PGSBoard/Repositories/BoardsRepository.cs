@@ -174,16 +174,10 @@ namespace PGSBoard.Repositories
                         .Where(card => card.ListId == updateCardPositionDto.OldListId  //take old list, where was our card
                         && card.PositionCardId > cardToUpdate.PositionCardId  // take all card which had larger position
                         && card.Id != updateCardPositionDto.CardId).ToList(); // don't take card which we drag and drop
-                    var prevCardsOnNewList = 
-                        cards
-                        .Where(card => card.ListId == updateCardPositionDto.ListId
-                        && card.PositionCardId < updateCardPositionDto.PositionCard).ToList();
                     var nextCardsList =
                         cards
                         .Where(card => card.ListId == updateCardPositionDto.ListId // take new list, where we drop our card
                         && card.PositionCardId >= updateCardPositionDto.PositionCard).ToList();
-
-                    //updateCardPositionDto.PositionCard = prevCardsOnNewList.Count;
 
                     foreach (var prevCard in prevCardsList)
                     {
