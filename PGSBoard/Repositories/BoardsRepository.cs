@@ -105,7 +105,8 @@ namespace PGSBoard.Repositories
             {
                 Name = dto.Name,
                 Description = dto.Description,
-                ListId = dto.ListId
+                ListId = dto.ListId,
+                PositionCardId = dto.ListLength > 0 ? dto.ListLength : 0
             };
 
             using (var db = new PGSBoardContext())
@@ -143,6 +144,85 @@ namespace PGSBoard.Repositories
                 var boardToRemove = db.Boards.Single(board => board.Id == deleteBoardDto.Id);
                 db.Boards.Remove(boardToRemove);
                 return db.SaveChanges() == 1 ? deleteBoardDto.Id : 0;
+            }
+        }
+
+        public void UpdateCardPosition(UpdateCardPositionDto updateCardPositionDto)
+        {
+            using (var db = new PGSBoardContext())
+            {
+                if (updateCardPositionDto.ListId == updateCardPositionDto.OldListId) // first case when you sort cart in the same list
+                {
+                    var currentListCard = db.Cards.Where(card => card.ListId == updateCardPositionDto.ListId).ToList(); // take whole card from list, just one call to db
+                    var cardToUpdate = currentListCard.Single(card => card.Id == updateCardPositionDto.CardId); // take  card to Update (card which we drage and drop)
+                    var cardChangedAutomatically =                                                               // select card which have to change position after our drag and drop move
+                        currentListCard.Single(card => card.PositionCardId == updateCardPositionDto.PositionCard);
+
+                    cardChangedAutomatically.PositionCardId = cardChangedAutomatically.PositionCardId > cardToUpdate.PositionCardId // 2 cases: First, if you take card from up to down then position card which have to change  will be smaller about -1
+                        ? cardChangedAutomatically.PositionCardId - 1                                                               // Second, if you take card from down to up, then position card which have to change will be larger about +1
+                        : cardChangedAutomatically.PositionCardId + 1;
+                    cardToUpdate.PositionCardId = updateCardPositionDto.PositionCard; // update position card which we drag and drop
+                    db.SaveChanges();
+
+                }
+                else // second case when you sort( drag some card) to another list 
+                {
+                    var cards = db.Cards.Where(card => card.ListId == updateCardPositionDto.ListId || card.ListId == updateCardPositionDto.OldListId).ToList(); //take card from two lists
+                    var cardToUpdate = cards.Single(card => card.Id == updateCardPositionDto.CardId); // take our card which we drag and drop
+                    var prevCardsList =
+                        cards
+                        .Where(card => card.ListId == updateCardPositionDto.OldListId  //take old list, where was our card
+                        && card.PositionCardId > cardToUpdate.PositionCardId  // take all card which had larger position
+                        && card.Id != updateCardPositionDto.CardId).ToList(); // don't take card which we drag and drop
+                    var prevCardsOnNewList = 
+                        cards
+                        .Where(card => card.ListId == updateCardPositionDto.ListId
+                        && card.PositionCardId < updateCardPositionDto.PositionCard).ToList();
+                    var nextCardsList =
+                        cards
+                        .Where(card => card.ListId == updateCardPositionDto.ListId // take new list, where we drop our card
+                        && card.PositionCardId >= updateCardPositionDto.PositionCard).ToList();
+
+                    //updateCardPositionDto.PositionCard = prevCardsOnNewList.Count;
+
+                    foreach (var prevCard in prevCardsList)
+                    {
+                        prevCard.PositionCardId = prevCard.PositionCardId - 1; // old list, reduce position about -1
+                    }
+
+                    foreach (var nextCard in nextCardsList)
+                    {
+                        nextCard.PositionCardId = nextCard.PositionCardId + 1; // new list increase position card about 1
+                    }
+                    cardToUpdate.ListId = updateCardPositionDto.ListId;
+                    cardToUpdate.PositionCardId = updateCardPositionDto.PositionCard; //update dropped position card
+
+                    db.SaveChanges();
+                }
+            }
+        }
+        public int ListLength(int listId)
+        {
+            using (var db = new PGSBoardContext())
+            {
+                var listLength = db.Cards.Count(card => card.ListId == listId);  // get number of cards in one list
+                return listLength;
+            }
+        }
+
+        public void ChangePositionCardBeforeDelete(DeleteCardDto dto) // reduce position cards after delete
+        {
+            using (var db = new PGSBoardContext())
+            {
+                var cards = db.Cards.Where(card => card.ListId == dto.ListId || card.Id == dto.CardId).ToList();
+                var cardToDelete = cards.Single(card => card.Id == dto.CardId);
+                var cardToUpdate = cards.Where(card => card.Id != dto.CardId && card.PositionCardId > cardToDelete.PositionCardId).ToList();
+
+                foreach (var card in cardToUpdate)
+                {
+                    card.PositionCardId = card.PositionCardId - 1;
+                }
+                db.SaveChanges();
             }
         }
     }

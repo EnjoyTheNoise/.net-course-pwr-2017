@@ -56,9 +56,9 @@
             List<CardViewModel> cardsViewModels = new List<CardViewModel>();
             foreach (var card in cards)
             {
-                cardsViewModels.Add(new CardViewModel(card.Id, card.Name, card.Description));
+                cardsViewModels.Add(new CardViewModel(card.Id, card.Name, card.Description, card.PositionId));
             }
-            return cardsViewModels;
+            return cardsViewModels.OrderBy(x => x.PositionId).ToList();
         }
 
         private List<ListViewModel> MapListsToListViewModels(List<ListDto> lists)  //This method maps lists to ListViewModels
@@ -81,6 +81,7 @@
         //Method for creatin new list
         public int CreateCard(CreateCardDto dto)
         {
+            dto.ListLength = this.boardsRepository.ListLength(dto.ListId);
             this.boardsRepository.AddCard(dto);
 
             var boards = this.boardsRepository.GetBoards();
@@ -90,7 +91,13 @@
 
         public int DeleteCard(DeleteCardDto dto)
         {
+            this.boardsRepository.ChangePositionCardBeforeDelete(dto);
             return this.boardsRepository.DeleteCard(dto);
+        }
+
+        public void UpdateCardPosition(UpdateCardPositionDto updateCardPositionDto)
+        {
+            this.boardsRepository.UpdateCardPosition(updateCardPositionDto);
         }
 
         public int DeleteList(DeleteListDto deleteListDto)
