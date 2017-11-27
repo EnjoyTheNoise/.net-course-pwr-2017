@@ -9,7 +9,7 @@ namespace PGSBoard
         public static void RegisterBundles(BundleCollection bundles)
         {
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
-                "~/Scripts/jquery-{version}.js",
+                "~/Scripts/jquery-{version}.min.js",
                 "~/Scripts/jquery-ui.min.js",
                 "~/Scripts/jquery.blockUI.min.js"));
 
@@ -22,8 +22,8 @@ namespace PGSBoard
                         "~/Scripts/modernizr-*"));
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
-                      "~/Scripts/bootstrap.js",
-                      "~/Scripts/respond.js"));
+                      "~/Scripts/bootstrap.min.js",
+                      "~/Scripts/respond.min.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/cardBundle").IncludeDirectory("~/Scripts/app/card", "*.js", true));
 
